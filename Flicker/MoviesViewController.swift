@@ -21,7 +21,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.dataSource = self
         tableView.delegate = self
         // Do any additional setup after loading the view.
-//        let refreshConrol = UIRefreshControl()
+        let refreshControl = UIRefreshControl()
+        
+        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex:0)
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
@@ -75,11 +78,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = movies![indexPath.row]
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
-//        let posterPath = movie["poster_path"] as! String
-        
-//        let baseUrl = "http://image.tmdb.org/t/p/w500/"
-        
-//        let imageUrl = NSURL(string: baseUrl + posterPath)
+
         if let posterPath = movie["poster_path"] as? String {
             let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = NSURL(string: posterBaseUrl + posterPath)
@@ -96,7 +95,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
 
-/*    func refreshControlAction(refreshControl: UIRefreshControl){
+    func refreshControlAction(refreshControl: UIRefreshControl){
+        
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let url = NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
+        let request = NSURLRequest(
+            URL: url!,
+            cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData,
+            timeoutInterval: 10)
         
         let session = NSURLSession(
             configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
@@ -112,18 +118,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             MBProgressHUD.hideHUDForView(self.view, animated: true)
                             print("response: \(responseDictionary)")
                             self.movies = responseDictionary["results"] as! [NSDictionary]
-                            self.tableView.reloadData()
                     }
                 }
         })
+        task.resume()
             
-            self.UITableView.reloadData()
-            
-            refreshControl.endRefreshing()
-            
-            ));
+        self.tableView.reloadData()
         
+        refreshControl.endRefreshing()
+
     }
-*/
+
 
 }
