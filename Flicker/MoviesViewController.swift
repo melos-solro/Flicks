@@ -92,6 +92,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             cell.posterView.image = nil
         }
         
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.blueColor()
+        cell.selectedBackgroundView = backgroundView
+        
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
         return cell
